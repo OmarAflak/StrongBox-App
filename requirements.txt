@@ -1,0 +1,4 @@
+cryptography
+dataclasses-json
+fastapi
+uvicorn[standard]
