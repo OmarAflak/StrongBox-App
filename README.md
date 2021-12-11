@@ -1,4 +1,4 @@
-# StrongBox
+# StrongBox Desktop Application
 
 A free, opensource, and safe passwords keeper. Chrome extension available.
 
