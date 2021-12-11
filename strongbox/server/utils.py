@@ -1,4 +1,5 @@
 import os
+import hashlib
 from typing import Optional
 from strongbox.locker.locker import Locker
 from strongbox.locker.user import User
@@ -29,9 +30,13 @@ def _get_locker(profile: str, password: str) -> Locker:
     return Locker(user, encryptor)
 
 
+def _sha256(s: str) -> str:
+    return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
+
 def create_profile(profile: str, password: str):
     output = _get_profile_path(profile)
-    encryptor = FernetWithPasswordEncryptor(password)
+    encryptor = FernetWithPasswordEncryptor(_sha256(password))
     locker = Locker(User(profile), encryptor)
     locker.save(output, save_encryptor=True)
 
