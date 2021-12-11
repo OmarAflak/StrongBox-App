@@ -47,13 +47,13 @@ class FernetWithPasswordEncryptor(IEncryptorPassword):
             salt=salt,
             iterations=390000,
         )
-        self.fernet = Fernet(base64.urlsafe_b64encode(kdf.derive(bytes(password, "utf-8"))))
+        self.fernet = Fernet(base64.urlsafe_b64encode(kdf.derive(password.encode())))
 
     def encrypt(self, data: str) -> str:
-        return str(self.fernet.encrypt(bytes(data, "utf-8")), "utf-8")
+        return str(self.fernet.encrypt(data.encode()), "utf-8")
 
     def decrypt(self, data: str) -> str:
-        return str(self.fernet.decrypt(bytes(data, "utf-8")), "utf-8")
+        return str(self.fernet.decrypt(data.encode()), "utf-8")
 
     def to_json(self) -> str:
         return json.dumps({"salt": str(base64.b64encode(self.salt), "utf-8")})
