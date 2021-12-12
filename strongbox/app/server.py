@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from cryptography.fernet import InvalidToken
 from strongbox.locker.io import IO
 from strongbox.locker.locker import Account
-import strongbox.server.utils as utils
+import strongbox.app.utils as utils
 
 _ERROR_WRONG_PASSWORD = "Wrong password"
 _ERROR_URL_NOT_FOUND = "URL not in strongbox"
