@@ -12,12 +12,11 @@ CACHE_FILEPATH = os.path.join(STRONGBOX_PATH, CACHE_FILENAME)
 class UserCache(IO):
     profile: str
 
+    def put(self):
+        self.to_file(CACHE_FILEPATH)
 
-def cache_user(user_cache: UserCache):
-    user_cache.to_file(CACHE_FILEPATH)
-
-
-def get_user_cache() -> Optional[UserCache]:
-    if os.path.exists(CACHE_FILEPATH):
-        return UserCache.from_file(CACHE_FILEPATH)
-    return None
+    @classmethod
+    def get(cls) -> Optional['UserCache']:
+        if os.path.exists(CACHE_FILEPATH):
+            return UserCache.from_file(CACHE_FILEPATH)
+        return None

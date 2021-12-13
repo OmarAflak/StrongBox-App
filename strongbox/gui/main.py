@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from strongbox.locker.io import IO
 from strongbox.app.utils import _sha256, get_accounts
 from cryptography.fernet import InvalidToken
-from strongbox.gui.utils import UserCache, cache_user, get_user_cache
+from strongbox.gui.utils import UserCache
 
 
 @dataclass
@@ -31,6 +31,11 @@ class EntryWithPlaceholder(ttk.Entry):
         self.insert(0, self.placeholder)
         self["foreground"] = self.placeholder_color
 
+    def put_text(self, text: str):
+        self.delete(0, tkinter.END)
+        self.insert(0, text)
+        self['foreground'] = self.default_fg_color
+
     def foc_in(self, *args):
         if str(self["foreground"]) == self.placeholder_color:
             self.delete(0, tkinter.END)
@@ -48,7 +53,7 @@ class LoginPage:
                 profile = profile_entry.get()
                 password = _sha256(password_entry.get())
                 get_accounts(profile, password)
-                cache_user(UserCache(profile))
+                UserCache(profile).put()
                 mainframe.destroy()
                 MainPage(root, UserData(profile, password))
             except InvalidToken:
@@ -71,32 +76,10 @@ class LoginPage:
         password_entry.grid(row=3, column=2)
         password_entry.bind("<KeyRelease-Return>", on_done)
 
-
-class LoginPasswordOnlyPage:
-    def __init__(self, root: tkinter.Tk, profile: str):
-        def on_done(event: tkinter.Event):
-            try:
-                password = _sha256(entry.get())
-                get_accounts(profile, password)
-                mainframe.destroy()
-                MainPage(root, UserData(profile, password))
-            except InvalidToken:
-                error = ttk.Label(mainframe, text="Wrong password!")
-                error.grid(row=3, column=2)
-                error.config(foreground="red")
-                entry.delete(0, tkinter.END)
-
-        root.title("StrongBox")
-
-        mainframe = ttk.Frame(root, padding="3 3 12 12")
-        mainframe.grid(column=0, row=0, sticky=(tkinter.N, tkinter.W, tkinter.E, tkinter.S))
-        root.columnconfigure(0, weight=1)
-        root.rowconfigure(0, weight=1)
-
-        entry = EntryWithPlaceholder(mainframe, "password")
-        entry.grid(row=2, column=2)
-        entry.focus()
-        entry.bind("<KeyRelease-Return>", on_done)
+        cache = UserCache.get()
+        if cache:
+            profile_entry.put_text(cache.profile)
+            password_entry.focus()
 
 
 class MainPage:
@@ -114,15 +97,6 @@ class MainPage:
         root.update()
 
 
-class GUI:
-    def __init__(self, root: tkinter.Tk):
-        cache = get_user_cache()
-        if not cache:
-            LoginPage(root)
-        else:
-            LoginPasswordOnlyPage(root, cache.profile)
-
-
 root = tkinter.Tk()
-GUI(root)
+LoginPage(root)
 root.mainloop()
