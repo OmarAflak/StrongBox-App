@@ -1,14 +1,12 @@
-from typing import Generic, Optional, TypeVar
 from fastapi import FastAPI, Body
-from dataclasses import dataclass
 from fastapi.middleware.cors import CORSMiddleware
 from cryptography.fernet import InvalidToken
-from strongbox.locker.io import IO
 from strongbox.locker.locker import Account
+from strongbox.app.response import APIResponse, APIError
 import strongbox.app.utils as utils
 
-_ERROR_WRONG_PASSWORD = "Wrong password"
-_ERROR_URL_NOT_FOUND = "URL not in strongbox"
+_ERROR_WRONG_PASSWORD = APIError(1, "Wrong password")
+_ERROR_URL_NOT_FOUND = APIError(2, "URL not in strongbox")
 
 app = FastAPI()
 app.add_middleware(
@@ -18,24 +16,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-T = TypeVar("T", bound=IO)
-
-
-@dataclass
-class APIResponse(Generic[T]):
-    success: bool
-    message: Optional[str] = None
-    data: Optional[T] = None
-
-    @classmethod
-    def on_success(cls, data: T) -> 'APIResponse[T]':
-        return cls(success=True, message=None, data=data)
-
-    @classmethod
-    def on_fail(cls, message: Optional[str] = None) -> 'APIResponse[T]':
-        return cls(success=False, message=message, data=None)
 
 
 @app.post("/account")
