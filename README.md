@@ -8,7 +8,6 @@ A free, opensource, and safe passwords keeper. [Chrome extension available](http
 git clone ... & cd ...
 python -m venv .venv
 source .venv/bin/activate
-.venv/bin/python -m pip install --upgrade pip
 .venv/bin/python -m pip install -r requirements.txt
 uvicorn strongbox.app.server:app --reload
 ```
