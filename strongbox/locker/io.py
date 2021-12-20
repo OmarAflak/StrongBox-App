@@ -2,7 +2,6 @@ from typing import Type, TypeVar
 from dataclasses_json import DataClassJsonMixin
 from strongbox.locker.utils import create_parent_folder
 
-
 T = TypeVar("T", bound="IO")
 
 

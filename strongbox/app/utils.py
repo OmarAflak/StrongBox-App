@@ -6,7 +6,6 @@ from strongbox.locker.user import User
 from strongbox.locker.account import Account
 from strongbox.locker.encryptor import FernetWithPasswordEncryptor
 
-
 STRONGBOX_PARENT_PATH = os.path.expanduser("~")
 STRONGBOX_DIRECTORY_NAME = ".strongbox"
 STRONGBOX_PATH = os.path.join(STRONGBOX_PARENT_PATH, STRONGBOX_DIRECTORY_NAME)
