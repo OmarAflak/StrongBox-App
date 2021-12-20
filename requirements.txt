@@ -1,4 +1,6 @@
 cryptography
 dataclasses-json
 fastapi
+python-dotenv
+rumps
 uvicorn[standard]
