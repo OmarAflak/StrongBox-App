@@ -4,3 +4,4 @@ fastapi
 python-dotenv
 rumps
 uvicorn[standard]
+flake8
