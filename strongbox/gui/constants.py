@@ -10,7 +10,7 @@ def _get_int(key: str, default: int) -> int:
 
 
 def _get_string(key: str, default: str) -> str:
-    return int(os.environ.get(key, default))
+    return os.environ.get(key, default)
 
 
 class Constants(ABC):
